@@ -1,18 +1,19 @@
 import mongoose, { Document } from "mongoose";
 
 //TODO Reletions between user and task
+
 const Schema = mongoose.Schema;
 
 interface IUser extends Document {
   email: string;
-  password: number;
+  password: string;
   tasks?: string[];
   tasksDone?: string[];
 }
 
 const userSchema = new Schema<IUser>({
   email: { type: String, required: true, unique: true },
-  password: { type: Number, required: true },
+  password: { type: String, required: true },
   tasks: { type: [String] },
   tasksDone: { type: [String] },
 });

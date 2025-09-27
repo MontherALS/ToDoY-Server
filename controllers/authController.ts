@@ -1,27 +1,20 @@
 import { Request, Response } from "express";
 import User from "../model/User";
-
-export const signup = (req: Request, res: Response) => {
+export const signup = async (req: Request, res: Response) => {
+  //Todo Add bycript
   try {
     const { email, password, confirmPassword } = req.body as {
       email: string;
       password: number;
       confirmPassword: number;
     };
-
     const newUser = {
       email: email,
       password: password,
     };
 
-    if (password !== confirmPassword) {
-      res
-        .status(402)
-        .json({ message: "Make sure the passwords are matchinh! " });
-      return;
-    }
     const user = new User(newUser);
-    user.save();
+    await user.save();
     res.status(201).json({ message: "User Created!" });
   } catch (err) {
     if (err instanceof Error) {
