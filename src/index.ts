@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import auth from "../router/auth";
+import task from "../router/task";
 
 const app = express();
 
@@ -12,6 +13,7 @@ const dbUrl = process.env.DBURL;
 app.use(express.json());
 
 app.use("/auth", auth);
+app.use("/task", task);
 
 if (!dbUrl) throw new Error("DBURL is not defined in .env");
 mongoose

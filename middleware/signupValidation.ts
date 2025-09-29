@@ -20,7 +20,7 @@ export const signupRules = [
   check("password")
     .isStrongPassword({ minLength: 6 })
     .withMessage(
-      "Password must be at least 6 characters and include symbols, numbers, and letters"
+      "Password must be at least 6 characters and include symbols, numbers, and UpperCase letters"
     ),
 
   check("confirmPassword")
