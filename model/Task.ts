@@ -4,17 +4,19 @@ const Schema = mongoose.Schema;
 
 interface ITask extends Document {
   name: string;
-  due: Date;
+  dueDate: string;
   user: Types.ObjectId;
   completed: boolean;
+  priority: "low" | "medium" | "high";
 }
 
 const taskSchema = new Schema<ITask>(
   {
     name: { type: String, required: true },
-    due: { type: Date },
+    dueDate: { type: String },
     user: { type: Schema.Types.ObjectId, ref: "User" },
     completed: { type: Boolean, default: false },
+    priority: { type: String, enum: ["low", "medium", "high"] },
   },
   { timestamps: true }
 );

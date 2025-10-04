@@ -3,19 +3,22 @@ import Task from "../model/Task";
 
 export const createTask = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params;
+    const userId = req.user?.id;
 
-    const { name, due } = req.body as {
+    const { name, dueDate, priority } = req.body as {
       name: string;
-      due: Date;
+      dueDate: string;
+      priority: "low" | "medium" | "high";
     };
 
     const newTask = {
       name: name,
-      due: due,
+      dueDate: dueDate,
+      priority: priority,
       user: userId,
     };
 
+    console.log("Creating task for user:", newTask);
     const task = new Task(newTask);
     await task.save();
 
@@ -30,8 +33,12 @@ export const createTask = async (req: Request, res: Response) => {
 
 export const getTasks = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params;
+    const userId = req.user?.id;
+    console.log("Fetching tasks for user:", userId);
     const tasks = await Task.find({ user: userId });
+    if (!tasks) {
+      return res.status(404).json({ message: "No tasks found" });
+    }
     res.status(200).json(tasks);
   } catch (err) {
     if (err instanceof Error) {
@@ -62,18 +69,14 @@ export const getTaskById = async (req: Request, res: Response) => {
 export const updateTask = async (req: Request, res: Response) => {
   try {
     const { taskId } = req.params;
-    const { name, due } = req.body as {
-      name: string;
-      due: Date;
-    };
-    const updatedTask = {
-      name: name,
-      due: due,
-    };
+    const completed = req.body.completed as Boolean;
 
-    const task = await Task.findByIdAndUpdate(taskId, updatedTask, {
-      new: true,
-    });
+    const task = await Task.findByIdAndUpdate(
+      taskId,
+      { completed: completed },
+      { new: true }
+    );
+    console.log("updated ", task);
     if (!task) {
       return res.status(404).json({ message: "Task not found" });
     }

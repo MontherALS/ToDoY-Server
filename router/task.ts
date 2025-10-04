@@ -12,10 +12,13 @@ import { taskRules, validateTask } from "../middleware/taskValidation";
 const router = express.Router();
 
 router.post("/:userId", taskRules, validateTask, createTask);
-router.get("/tasks/:userId", getTasks);
+
+router.get("/tasks", getTasks);
 
 router.get("/:taskId", getTaskById);
-router.put("/:taskId", taskRules, validateTask, updateTask);
+
+router.put("/:taskId", updateTask);
+
 router.delete("/:taskId", deleteTask);
 
 export default router;

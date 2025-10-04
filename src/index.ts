@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import auth from "../router/auth";
 import task from "../router/task";
+import verifyJWT from "../middleware/jwtVerify";
+
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
@@ -17,7 +19,7 @@ app.use(express.json());
 
 app.use("/auth", auth);
 
-app.use("/task", task);
+app.use("/task", verifyJWT, task);
 
 if (!dbUrl) throw new Error("DBURL is not defined in .env");
 
